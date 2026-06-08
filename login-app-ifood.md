@@ -1,0 +1,667 @@
+# Teste Cases - Login App iFood
+
+Este documento apresenta casos de teste desenvolvidos para validar o fluxo de login de um aplicativo mobile similar ao iFood.
+
+O objetivo é cobrir cenários funcionais, negativos e de segurança, simulando situações reais de uso.
+
+Escopo:
+
+- Login com e-mail e senha
+- Validação de campos
+- Segurança (tentativas, enumeração)
+- Sessão (login persistente e logout)
+- OAuth (Google / Facebook)
+- OTP (SMS)
+
+---
+
+# ID: LOGIN-POS-001
+
+Título: Login com credenciais válidas
+
+Funcionalidade: Login
+
+Tipo de teste: Funcional / Positivo
+
+Prioridade: Alta
+
+Ambiente: Android 13 / App versão 1.0.0
+
+Pré-condições:
+
+- App instalado e atualizado
+- Dispositivo com conexão ativa à internet
+- Usuário previamente cadastrado
+
+Dados de teste:
+
+- E-mail: `usuario@email.com`
+- Senha: `Testesenha123`
+
+Passos:
+
+1. Abrir o app
+2. Tocar em "Entrar"
+3. Selecionar a opção "Entrar com e-mail"
+4. Inserir o e-mail `usuario@email.com`
+5. Inserir a senha `Testesenha123`
+6. Tocar no botão "Entrar"
+
+Resultado esperado:
+
+- Usuário autenticado com sucesso
+- Redirecionamento para a tela inicial (Home)
+- Nome/identificação do usuário exibido no cabeçalho ou menu
+- Sessão iniciada com sucesso
+- Tempo de resposta inferior a 3 segundos
+
+Pós-condições:
+
+- Sessão ativa
+
+Resultado obtido:
+
+- Usuário autenticado com sucesso após inserção de credenciais válidas
+- Redirecionamento para a tela Home realizado corretamente
+- Nome do usuário exibido no cabeçalho
+- Sessão iniciada com sucesso
+
+Tempo de resposta do sistema:
+
+- 2 segundos (dentro do esperado)
+
+Status:
+
+- [ ]  Não executado
+- [x]  Passou
+- [ ]  Falhou
+
+---
+
+# ID: LOGIN-NEG-002
+
+Título: Login com senha incorreta
+
+Funcionalidade: Login
+
+Tipo de teste: Funcional / Negativo
+
+Prioridade: Alta
+
+Ambiente: Android 13 / App versão 1.0.0
+
+Pré-condições:
+
+- App instalado e aberto na tela de Login
+- Dispositivo com conexão ativa à internet
+- Usuário previamente cadastrado
+
+Dados de teste:
+
+- E-mail: `usuario@email.com`
+- Senha (incorreta): `senhaErrada123`
+
+Passos:
+
+1. Acessar a tela de Login
+2. Inserir o e-mail `usuario@email.com`
+3. Inserir a senha `senhaErrada123`
+4. Tocar no botão "Entrar"
+
+Resultado esperado:
+
+- Sistema exibe a mensagem: "E-mail ou senha incorretos"
+- Usuário permanece na tela de login
+- Campo de senha é limpo automaticamente
+- Campo de e-mail permanece preenchido
+- Nenhuma informação específica (ex.: "senha incorreta") é exibida
+- Sessão não iniciada
+- Tempo de resposta inferior a 3 segundos
+
+Pós-condições:
+
+- Sessão não iniciada
+
+Resultado obtido:
+
+- O app exibiu a mensagem de erro: "E-mail ou senha incorretos" abaixo do campo de senha
+- O usuário permaneceu na tela de Login
+- O campo de senha foi limpo automaticamente
+- O campo de e-mail manteve o valor preenchido
+- Nenhum dado sensível foi exposto na mensagem
+
+Tempo de resposta do sistema:
+
+- Aproximadamente 1,5 segundos (dentro do esperado)
+
+Status:
+
+- [ ]  Não executado
+- [x]  Passou
+- [ ]  Falhou
+
+---
+
+# ID: LOGIN-NEG-003
+
+Título: Login com e-mail não cadastrado (prevenção de enumeração)
+
+Funcionalidade: Login
+
+Tipo de teste: Funcional / Negativo / Segurança
+
+Prioridade: Alta
+
+Ambiente: Android 13 / App versão 1.0.0
+
+Pré-condições:
+
+- App instalado e aberto na tela de Login
+- Dispositivo com conexão ativa à internet
+- E-mail não cadastrado previamente no sistema
+
+Dados de teste:
+
+- E-mail (não cadastrado): `usuario.nao.cadastrado@email.com`
+- Senha: `Testesenha123`
+
+Passos:
+
+1. Acessar a tela de login
+2. Inserir o e-mail `usuario.nao.cadastrado@email.com`
+3. Inserir a senha `Testesenha123`
+4. Tocar no botão "Entrar"
+
+Resultado esperado:
+
+- Sistema exibe mensagem genérica: "E-mail ou senha incorretos"
+- Sistema não informa se o e-mail está cadastrado (prevenção de enumeração)
+- Usuário permanece na tela de login
+- Sessão não iniciada
+- Tempo de resposta entre 1 a 3 segundos
+
+Pós-condições:
+
+- Usuário permanece deslogado
+- Nenhum token de sessão foi gerado ou armazenado
+
+Resultado obtido:
+
+- Sistema exibiu mensagem: "E-mail ou senha incorretos"
+- Mensagem apresentada de forma genérica, sem indicar se o e-mail está cadastrado
+- Usuário permaneceu na tela de login
+- Campo de senha foi limpo automaticamente após tentativa
+- Campo de e-mail permaneceu preenchido
+- Botão "Entrar" permaneceu habilitado após tentativa
+- Nenhuma navegação para outra tela foi realizada
+- Não houve criação de sessão (usuário permaneceu deslogado)
+
+Tempo de resposta do sistema: 
+
+- 2.9 segundos
+
+Status:
+
+- [ ]  Não executado
+- [x]  Passou
+- [ ]  Falhou
+
+---
+
+# ID: LOGIN-NEG-004
+
+Título: Login com e-mail em formato inválido
+
+Funcionalidade: Login
+
+Tipo de teste: Funcional / Negativo
+
+Prioridade: Alta
+
+Ambiente: Android 13 / App versão 1.0.0
+
+Pré-condições:
+
+- App instalado e aberto na tela de Login
+- Dispositivo com conexão ativa à internet
+
+Dados de teste:
+
+- E-mail (inválido): `usuarioemail.com`
+- Senha: `Testesenha123`
+
+Passos:
+
+1. Acessar a tela de login
+2. Inserir o e-mail `usuarioemail.com`
+3. Inserir a senha `Testesenha123`
+4. Tocar no botão "Entrar"
+
+Resultado esperado:
+
+- Sistema valida o formato do e-mail no lado do cliente (frontend)
+- Nenhuma requisição é enviada ao servidor
+- Mensagem exibida: "Digite um e-mail válido"
+- Campo de e-mail é destacado visualmente (ex: borda vermelha)
+- Botão "Entrar" permanece desabilitado ou bloqueia envio
+- Campo de senha permanece preenchido
+- Usuário permanece na tela de login
+- Sessão não é iniciada
+- Validação ocorre em tempo inferior a 0.5 segundos
+
+Pós-condições:
+
+- Usuário permanece deslogado
+- Nenhuma requisição foi enviada ao servidor
+- Nenhum token de sessão foi gerado
+
+Resultado obtido:
+
+- Sistema validou o formato do e-mail no frontend
+- Mensagem exibida: "Digite um e-mail válido"
+- Campo de e-mail destacado visualmente
+- Botão "Entrar" permaneceu desabilitado
+- Nenhuma requisição foi enviada ao servidor
+- Usuário permaneceu na tela de login
+- Tempo de resposta observado: instantâneo (~0.3 segundos)
+
+Tempo de resposta do sistema:
+
+- Validação deve ocorrer em menos de 0.5 segundos
+
+Status:
+
+- [ ]  Não executado
+- [x]  Passou
+- [ ]  Falhou
+
+---
+
+# ID: LOGIN-NEG-005
+
+Título: Login com campos obrigatórios vazios
+
+Funcionalidade: Login
+
+Tipo de teste: Funcional / Negativo
+
+Prioridade: Alta
+
+Ambiente: Android 13 / App versão 1.0.0
+
+Pré-condições:
+
+- App instalado e aberto na tela de Login
+
+Dados de teste:
+
+- E-mail: (vazio)
+- Senha: (vazio)
+
+Passos:
+
+1. Acessar a tela de login
+2. Não preencher e-mail e senha
+3. Tocar no botão "Entrar"
+
+Resultado esperado:
+
+- Sistema valida campos obrigatórios no frontend
+- Nenhuma requisição é enviada ao servidor
+- Mensagens exibidas:
+    - "Informe o e-mail"
+    - "Informe a senha"
+- Campos são destacados visualmente (ex: borda vermelha)
+- Botão "Entrar" permanece desabilitado OU bloqueia envio
+- Usuário permanece na tela de login
+- Sessão não é iniciada
+- Validação ocorre em tempo inferior a 0.5 segundos
+
+Pós-condições:
+
+- Usuário permanece deslogado
+- Nenhuma requisição foi enviada ao servidor
+- Nenhum token de sessão foi gerado
+
+Resultado obtido:
+
+- Sistema validou os campos no frontend
+- Mensagens exibidas:
+    - "Informe o e-mail"
+    - "Informe a senha"
+- Campos destacados visualmente
+- Botão "Entrar" permaneceu desabilitado
+- Nenhuma requisição foi enviada
+- Usuário permaneceu na tela de login
+
+Tempo de resposta do sistema:
+
+- instantâneo (0.2 segundos)
+
+Status:
+
+- [ ]  Não executado
+- [x]  Passou
+- [ ]  Falhou
+
+---
+
+# ID: LOGIN-SEC-006
+
+Título: Bloqueio/retardo após múltiplas tentativas de login (rate limit)
+
+Funcionalidade: Login
+
+Tipo de teste: Segurança / Negativo
+
+Prioridade: Alta
+
+Ambiente: Android 13 / App versão 1.0.0
+
+Pré-condições:
+
+- App instalado e aberto na tela de Login
+- Dispositivo com conexão ativa à internet
+- Usuário previamente cadastrado
+
+Dados de teste:
+
+- E-mail: `usuario@email.com`
+- Senha (incorreta): `senhaErrada123`
+
+Passos:
+
+1. Acessar a tela de login
+2. Tentar autenticar 5 vezes consecutivas com senha incorreta
+3. Observar o comportamento na 6ª tentativa
+
+Resultado esperado:
+
+- Sistema aplica proteção contra força bruta (ex.: atraso progressivo, captcha, bloqueio temporário)
+- Mensagem genérica (sem revelar detalhes)
+- Sessão não iniciada
+
+Pós-condições:
+
+- Sessão não iniciada
+
+Resultado obtido:
+
+- Sistema permitiu múltiplas tentativas consecutivas sem qualquer bloqueio
+- Após 5 tentativas com senha incorreta, a 6ª tentativa foi processada normalmente
+- Nenhum mecanismo de proteção foi ativado (sem CAPTCHA, sem bloqueio temporário, sem atraso)
+- Sistema continuou exibindo mensagem: "E-mail ou senha incorretos"
+- Nenhuma limitação de requisições foi aplicada
+- Usuário permaneceu na tela de login
+- Sessão não foi iniciada
+
+Tempo de resposta do sistema:
+
+- 1.2 segundos por tentativa (sem variação ou atraso progressivo)
+
+Status:
+
+- [ ]  Não executado
+- [ ]  Passou
+- [x]  Falhou
+
+---
+
+# ID: LOGIN-SES-007
+
+Título: Login persistente (manter sessão)
+
+Funcionalidade: Sessão
+
+Tipo de teste: Funcional
+
+Prioridade: Média
+
+Ambiente: Android 13 / App versão 1.0.0
+
+Pré-condições:
+
+- Usuário previamente autenticado no app
+- Dispositivo com conexão ativa a internet
+
+Dados de teste:
+
+- E-mail: `usuario@email.com`
+- Senha: `Testesenha123`
+
+Passos:
+
+1. Realizar login com credenciais válidas
+2. Fechar o app completamente
+3. Abrir o app novamente
+
+Resultado esperado:
+
+- Usuário permanece autenticado após reabrir o app
+- Sistema redireciona diretamente para a tela inicial (Home)
+- Sessão é mantida via token válido armazenado no dispositivo
+- Nenhuma solicitação de login é exibida
+
+Pós-condições:
+
+- Sessão ativa mantida
+- Token de autenticação válido armazenado
+
+Resultado obtido:
+
+- Login realizado com sucesso na primeira etapa
+- Após fechar completamente o app e reabri-lo, o usuário foi redirecionado para a tela de login
+- Sessão não foi mantida
+- Sistema não apresentou mensagem de expiração de sessão
+- Nenhuma indicação de tempo limite de sessão foi exibida
+- Usuário precisou inserir credenciais novamente
+- Comportamento inconsistente com a expectativa de persistência de sessão
+
+Tempo de resposta do sistema:
+
+- Abertura do app: 1.6 segundos
+- Redirecionamento para tela de login: imediato após abertura
+
+Status:
+
+- [ ]  Não executado
+- [ ]  Passou
+- [x]  Falhou
+
+---
+
+# ID: LOGIN-SES-008
+
+Título: Logout encerra a sessão
+
+Funcionalidade: Sessão
+
+Tipo de teste: Funcional
+
+Prioridade: Alta
+
+Ambiente: Android 13 / App versão 1.0.0
+
+Pré-condições:
+
+- Usuário autenticado no app
+
+Dados de teste:
+
+- E-mail: `usuario@email.com`
+- Senha: `Testesenha123`
+
+Passos:
+
+1. Com o usuário logado, acessar o menu/conta
+2. Tocar em "Sair" / "Logout"
+3. Confirmar (se houver confirmação)
+4. Tentar acessar uma tela protegida (ex.: Perfil / Pedidos)
+
+Resultado esperado:
+
+- Sessão deve ser completamente encerrada (frontend e backend)
+- Token de autenticação deve ser invalidado
+- Usuário deve ser redirecionado para tela de login
+- Qualquer tentativa de acesso a telas protegidas deve exigir novo login
+- Botão "voltar" não deve permitir acesso autenticado
+
+Pós-condições:
+
+- Sessão encerrada
+
+Resultado obtido:
+
+- Usuário acessou o menu e acionou a opção "Logout"
+- Sistema redirecionou corretamente para a tela de login
+- Porém, ao tentar acessar diretamente uma tela protegida (ex: Perfil) via navegação interna ou botão "voltar", o acesso foi permitido sem solicitar novo login
+- Sessão aparentemente ainda válida em segundo plano
+- Token de autenticação não foi invalidado corretamente
+- Comportamento inconsistente com encerramento de sessão
+
+Tempo de resposta do sistema:
+
+- Ação de logout: 1.0 segundo
+- Redirecionamento para tela de login: imediato após ação
+
+Status:
+
+- [ ]  Não executado
+- [ ]  Passou
+- [x]  Falhou
+
+---
+
+# ID: LOGIN-OAUTH-009
+
+Título: Login via OAuth (Google/Facebook) com sucesso
+
+Funcionalidade: OAuth
+
+Tipo de teste: Funcional / Positivo
+
+Prioridade: Alta
+
+Ambiente: Android 13 / App versão 1.0.0
+
+Pré-condições:
+
+- App instalado e atualizado
+- Dispositivo com conexão ativa à internet
+- Conta Google/Facebook válida e ativa no dispositivo
+
+Dados de teste:
+
+- Conta Google: usuario.teste@gmail.com (ambiente de teste)
+
+Passos:
+
+1. Abrir o app
+2. Tocar em "Entrar"
+3. Selecionar "Continuar com Google" (ou "Facebook")
+4. Concluir o fluxo do provedor (selecionar conta / autorizar)
+
+Resultado esperado:
+
+- Sistema deve redirecionar para o provedor OAuth
+- Usuário deve conseguir autenticar e conceder permissões
+- App deve receber token válido do provedor
+- Usuário deve ser redirecionado para a Home
+- Sessão deve ser iniciada corretamente no app
+
+Pós-condições:
+
+- Sessão ativa iniciada
+- Token de autenticação armazenado no dispositivo
+- Usuário autenticado no sistema interno
+
+Resultado obtido:
+
+- Usuário acessou a opção "Continuar com Google"
+- Sistema redirecionou corretamente para o fluxo de autenticação do Google
+- Conta foi selecionada com sucesso
+- Permissões foram concedidas sem erro
+- App recebeu retorno do provedor com autenticação válida
+- Usuário foi redirecionado automaticamente para a tela Home
+- Dados do usuário (nome/e-mail) foram carregados corretamente
+- Sessão iniciada com sucesso no app
+
+Tempo de resposta do sistema:
+
+- Redirecionamento para Google: 1.2 segundos
+- Retorno ao app + login completo: 2.3 segundos
+
+Status:
+
+- [ ]  Não executado
+- [x]  Passou
+- [ ]  Falhou
+
+---
+
+# ID: LOGIN-OTP-010
+
+Título: Login com OTP (SMS)
+
+Funcionalidade: OTP
+
+Tipo de teste: Funcional / Positivo
+
+Prioridade: Alta
+
+Ambiente: Android 13 / App versão 1.0.0
+
+Pré-condições:
+
+- App instalado e atualizado
+- Dispositivo com conexão ativa à internet
+- Número de telefone válido (capaz de receber SMS)
+
+Dados de teste:
+
+- Telefone: `+55 (11) 99999-9999`
+
+Passos:
+
+1. Abrir o app
+2. Tocar em "Entrar"
+3. Selecionar "Entrar com SMS" / "Receber código"
+4. Informar o número de telefone
+5. Solicitar o envio do OTP
+6. Inserir o código recebido por SMS
+7. Confirmar
+
+Resultado esperado:
+
+- Sistema deve enviar OTP válido para o número informado
+- OTP deve ser único e válido por tempo determinado (ex: 2 minutos)
+- Código inserido corretamente deve autenticar o usuário
+- Sistema deve validar OTP no backend
+- Usuário deve ser redirecionado para a Home
+- Sessão deve ser iniciada com sucesso
+
+Pós-condições:
+
+- Sessão ativa
+
+Resultado obtido:
+
+- Usuário solicitou envio de OTP com sucesso
+- SMS foi recebido no dispositivo (4 segundos)
+- Código OTP inserido corretamente
+- Ao confirmar, sistema exibiu mensagem: "Código inválido ou expirado"
+- Nova tentativa com o mesmo código resultou na mesma mensagem
+- Solicitação de novo OTP gerou um novo código, porém o erro persistiu
+- Usuário não conseguiu autenticar mesmo com código válido
+- Sessão não foi iniciada
+
+Tempo de resposta do sistema:
+
+- Envio de OTP: 4 segundos
+- Validação do código: 1.5 segundos
+
+Status:
+
+- [ ]  Não executado
+- [ ]  Passou
+- [x]  Falhou
