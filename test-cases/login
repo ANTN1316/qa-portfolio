@@ -1,0 +1,12 @@
+Este documento apresenta casos de teste desenvolvidos para validar o fluxo de login de um aplicativo mobile similar ao iFood.
+
+O objetivo é cobrir cenários funcionais, negativos e de segurança, simulando situações reais de uso.
+
+Escopo:
+
+- Login com e-mail e senha
+- Validação de campos
+- Segurança (tentativas, enumeração)
+- Sessão (login persistente e logout)
+- OAuth (Google / Facebook)
+- OTP (SMS)
